@@ -1,0 +1,213 @@
+﻿@model IEnumerable<CRUD_PRODUCTOSMVC.Models.Producto>
+
+@{
+    ViewData["Title"] = "Lista productos";
+}
+<h1></h1>
+<h1></h1>
+<h1>Index</h1>
+<p>
+    <a  class="btn btn-primary" onclick="converHTMLFileToPDF()">Descargar pdf</a>
+</p>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Agregar</a>
+</p>
+<table class="table" id="table_id">
+    <thead>
+        <tr>
+       
+            <th>
+                @Html.DisplayNameFor(model => model.nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.caracteristicas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.calidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.precio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.fecha_ingreso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.unidades)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.estado)
+            </th>
+            <th></th>
+            
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+          
+            <td>
+                @Html.DisplayFor(modelItem => item.nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.caracteristicas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.calidad)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.precio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.fecha_ingreso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.unidades)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.estado)
+            </td>
+            <td>
+            </td>
+            
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@section Scripts{
+    
+<script>
+    $(document).ready(function() {
+    elem();
+    
+//obt("#table_id tbody",elem);
+} );
+
+
+function converHTMLFileToPDF() {
+    
+
+confirm("mensaje");
+var h = document.getElementById('#table_id');
+var Doc = new jsPDF();
+Doc.fromHTML(h,15,15);
+Doc.save('out.pdf')
+	//const { jsPDF } = window.jspdf;
+//	var doc = new jsPDF('l', 'mm', [1200, 1210]);
+//
+///	var pdfjs = document.querySelector('#table_id');
+
+	// Convert HTML to PDF in JavaScript
+//	doc.html(pdfjs, {
+	//	callback: function(doc) {
+	//		doc.save("output.pdf");
+	//	},
+	//	x: 10,
+	//	y: 10
+	//});
+}
+  
+
+var elem = function(){ 
+    var table = $('#table_id').DataTable( {
+         dom: 'Bfrtip',
+        buttons: [
+            'copy', 'csv', 'excel', 'pdf', 'print'
+        ],
+        "processing": true,
+        "serverSide": true,
+         "filter": true,
+         "pageLength":10,
+        "type": "GET",
+       
+
+        "ajax": {
+            "url": "@Url.Action("get", "Producto")",
+           
+        },
+       //  var id ="data":'id',
+       //method: form.attr("method"),
+      //  "data": data,
+     //   contentType: false,
+      //  processData: false,
+         columns: [
+      // { "data": "id" , "autoWidth": true  },
+        { "data": 'nombre', "autoWidth": true  },
+        { "data": 'caracteristicas', "autoWidth": true  },
+        { "data": 'calidad', "autoWidth": true  },
+        { "data": 'precio' , "autoWidth": true },
+        {"data":'fecha_ingreso', "autoWidth": true },
+        {"data":'unidades', "autoWidth": true },
+        {"data":'estado', "autoWidth": true },
+         {
+            // "data":'id',
+                "render": function (data,row,meta) { 
+                  //  var id ="id"
+                 //   console.log(id);
+                 //<a href=Producto/Details/"+"data": 'id'+" class='btn btn-primary ' id='det'  >Detalles</a> <a href=Producto/Edit/ class='btn btn-primary'  >Editar</a> <a href=Producto/Delete/ class='btn btn-danger'  >Eliminar</a> " 
+                    return "<button  class='edt btn btn-primary' >Detalles</button> <button  class='editar btn btn-primary' >Editar</button> <button  class='elm btn btn-danger' >Eliminar</button>"; }
+            },
+            
+            
+    ]
+    } );
+    obt("#table_id tbody",table);
+    editar("#table_id tbody",table);
+    eliminar("#table_id tbody",table);
+
+    }
+    var obt= function(tbody,table){
+    $(tbody).on("click", "button.edt", function(){
+        var data = table.row( $(this).parents("tr")).data();
+        console.log(data['id']);
+        window.location="Producto/Details/"+data['id']+"";
+        
+    });
+}
+ var editar= function(tbody,table){
+    $(tbody).on("click", "button.editar", function(){
+        var data = table.row( $(this).parents("tr")).data();
+        console.log(data['id']);
+        window.location="Producto/Edit/"+data['id']+"";
+        
+    });
+}
+ var eliminar= function(tbody,table){
+    $(tbody).on("click", "button.elm", function(){
+        var data = table.row( $(this).parents("tr")).data();
+        console.log(data['id']);
+        window.location="Producto/Delete/"+data['id']+"";
+        
+    });
+}
+
+
+
+
+
+//$('#table_id').DataTable( {
+ //   serverSide: true,
+  //  ajax: '/producto'
+//} );
+/*
+$("#det").click(function () {
+var id = $("#table_id").val();
+$.ajax({
+  type: "Details",
+  url: "Producto/Details/" + id,
+  contentType: "application/json; charset=utf-8",
+  dataType: "json",
+ success: function (data) {
+  alert('Registro Eliminado');
+ },
+ failure: function (data) {
+  alert(data.responseText);
+ },
+ error: function (data) {
+  alert(data.responseText);
+ }
+});
+});*/
+</script>
+}

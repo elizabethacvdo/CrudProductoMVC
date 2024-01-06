@@ -1,0 +1,69 @@
+﻿@model CRUD_PRODUCTOSMVC.Models.Producto
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Agregar</h1>
+
+<h4>Producto</h4>
+<hr />
+<div class="row container" >
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="nombre" class="control-label"></label>
+                <input asp-for="nombre" class="form-control" />
+                <span asp-validation-for="nombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="caracteristicas" class="control-label"></label>
+                <input asp-for="caracteristicas" class="form-control" />
+                <span asp-validation-for="caracteristicas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="calidad" class="control-label"></label>
+                <input asp-for="calidad" class="form-control" />
+                <span asp-validation-for="calidad" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="precio" class="control-label"></label>
+                <input asp-for="precio" class="form-control" min="0" />
+                <span asp-validation-for="precio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="fecha_ingreso" class="control-label"></label>
+                <input asp-for="fecha_ingreso" class="form-control" />
+                <span asp-validation-for="fecha_ingreso" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="unidades" class="control-label"></label>
+                <input asp-for="unidades" class="form-control"  min="0"/>
+                <span asp-validation-for="unidades" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="estado" class="control-label"></label>
+            <select asp-for="estado" class="form-select" aria-label="Default select example">
+             
+              <option value="True" selected>activo</option>
+              <option value="False">inactivo</option>
+               
+            </select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />|
+                 <a asp-action="Index">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <h1></h1>
+    <h1></h1>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
